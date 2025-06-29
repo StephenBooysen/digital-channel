@@ -1,0 +1,44 @@
+{
+    "prizes": [
+        {
+            "description": "10 % Off",
+            "summary": "This prize will discount the entire basket",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Free Cofeee",
+            "summary": "This item will discount a coffee in the basket",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Avos 10% Off",
+            "summary": "Any Avos added to the basket will be discounted by 10%",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Kit Kat",
+            "summary": "Any Kitkat added to the basket will be discounted by 10%",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Win a Car",
+            "summary": "This will automatically add a entry into Win a Car",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Sorry nothing today",
+            "summary": "This is not a prize ",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Mystery Prize",
+            "summary": "Not sure what this would be",
+            "bonusbuy": "2000007896"
+        },
+        {
+            "description": "Buy 2 Doughnuts",
+            "summary": "Buy 2 donghuts and get one freee",
+            "bonusbuy": "2000007896"
+        }
+    ]
+}

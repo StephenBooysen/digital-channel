@@ -1,0 +1,30 @@
+{
+  "customers":  [
+        {
+            "description": "XS member - Sixty60 member",
+            "summary": "This scenario should a customer with Saved Card",
+            "card":"9710084301931867",
+            "type":"POSITIVE"
+        },{
+            "description": "XS Member - This Card has been deactivated ",
+            "summary": "This scenario should return an error",
+            "card":"9710084002032122",
+            "type":"NEGATIVE"
+        },{
+            "description": "XS member & Not Sixty60 member",
+            "summary": "This scenario should prompt a popup",
+            "card":"99710084002032221",
+            "type":"POSITIVE"
+        }, {
+            "description": "XS member - Sixty60 member",
+            "summary": "This scenario should a customer with Saved Card",
+            "card":"9710084002032320",
+            "type":"POSITIVE"
+        }, {
+            "description": "XS member & Not Sixty60 member",
+            "summary": "This scenario should prompt a popup",
+            "card":"9710084902032230",
+            "type":"POSITIVE"
+        }
+    ]
+}

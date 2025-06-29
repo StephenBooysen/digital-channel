@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SRX Smart Trolley - Application</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style/global.css">
+</head>
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">SRX Smart Trolley - Application</a>
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+      <li><a href="#" class="nav-link px-2 text-white" onclick="javascipt:app.initialiseWelcome()">Welcome</a></li>
+      <li><a href="#" class="nav-link px-2 text-white" onclick="javascipt:app.initialiseLogin()">Login</a></li>
+      <li><a href="#" class="nav-link px-2 text-white" onclick="javascipt:app.initialiseWelcome()">Shopping</a></li>
+      <li><a href="#" class="nav-link px-2 text-white" onclick="javascipt:app.initialiseLogin()">Payment</a></li>
+    </ul>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 350px;">
+        <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+          <span class="fs-5 fw-semibold" id="menutitle"></span>
+        </a>
+        <div class="explanation-block" id="menuhelp">...</div>
+        <div class="list-group list-group-flush border-bottom scrollarea" id="menuitems"></div>
+      </div>
+
+      <div class="b-example-divider"></div>
+
+      <main class="col-md-8 ms-sm-auto col-lg-8 px-md-4" style="width: 1050px;">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-left pt-3 pb-2 mb-3 ">
+          <div class="tablet">
+            <div class="screen" id="screen">
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="b-example-divider"></div>
+
+      <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+          <span class="fs-5 fw-semibold" id="menutitle">Debugging</span>
+        </a>
+        <div class="explanation-block" id="menuhelp" style="width:380px">
+          <strong>Customer Variables</strong><br />
+          This section holds variables that need to be tracked for the customers buying session
+        </div>
+        <br />
+        <div class="list-group list-group-flush scrollarea" id="customerdetails">
+          <table class="table table-bordered" style="width:380px">
+            <thead>
+              <tr>
+                <th style="width:30%">Variable</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>Card Number</td>
+              <td id="cardno"></td>
+            </tr>
+            <tr>
+              <td>Rewards Id</td>
+              <td id="uid"></td>
+            </tr>
+            <tr>
+              <td>Has Sixty60</td>
+              <td id="hasSixty60"></td>
+            </tr>
+          </table>
+        </div>
+        <div id="debugbasketdetails">
+          <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold" id="menutitle">Basket Items</span>
+            <br />
+          </a>
+          <div class="explanation-block" id="menuhelp" style="width:380px">
+            <strong>Basket Items</strong><br />
+            This section holds the basket products so they can be removed when required to
+          </div>
+          <br />
+          <div class="list-group list-group-flush border-bottom scrollarea" id="debugbasketitems" style="width:380px">
+            <div class="info-block" id="basketinstruction">Your basket appears to be empty. Scan some items to add</div>
+          </div>
+        </div>
+        <div id="debugproductdetails" data-toggle="collapse">
+          <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold" id="menutitle">Product Variables</span>
+            <br />
+          </a>
+          <div class="explanation-block" id="menuhelp" style="width:380px;">
+            <strong>Product Variables</strong><br />
+            This section holds product variables that need to be stored for the session to enhance the customer
+            experience
+          </div>
+          <br />
+          <div class="list-group list-group-flush border-bottom scrollarea" id="debugbasketitems" style="width:380px">
+            <div class="info-block" id="productinstruction">There are no product details in memory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="moveable-div" id="moveableDiv">
+    <table class="table" id="debugging">
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+  <!-- Functional code -->
+  <script src="/harness/index.js"></script>
+  <script src="/index.js"></script>
+
+  <script>
+
+    /**
+     * Global variables
+     *  - Basket : An arry of the basket items
+     *  - Customer: The customer object 
+     *    - uid : The customers rewards id
+     *    - hasSixty60 : Determine if the customer has sixty60. This will indicate whether 
+     *      we allow them to view their cards or provide them with a compisite barcode 
+     **/
+    var basket = [];
+    var customer = {
+      uid: null,
+      hasSixty60: null
+    };
+    var store = {
+      storecode: 2701
+    }
+
+    /**
+     * validateCustomer : This method is used to validate a cardnumber and return a customer
+     * parameters
+     *  - cardNumber : The cardnumber as scanned by the customer
+     **/
+    function validateCustomer(cardNumber) {
+      customer.cardNumber = cardNumber;
+      harness.setStopwatch('customer-validate');
+      $.getJSON("/backend/customers/validate?cardNumber=" + cardNumber, function (data) {
+        customer.uid = data.response.uid;
+        customer.hasSixty60 = data.response.consents.sixty60.checkers;
+        app.initialiseShopping();
+        loadPlaceholder();
+        loadOffersForYou();
+        loadProductRecommendations();
+        harness.debug('Customer Validated ' + cardNumber, 'info', 'customer-validate')
+        harness.debugCustomer(customer)
+      }).fail(function (error) {
+        $('#loginfailed').show();
+        customer.uid = null;
+        customer.hasSixty60 = null;
+        harness.debug('Customer valdation failed ' + cardNumber, 'danger', 'customer-validate')
+        harness.debugCustomer(customer);
+      });
+    }
+
+    /**
+    * loadPlaceholder : This method loads some placeholder data
+    **/
+    function loadPlaceholder() {
+      var listItems = []
+      for (var i = 0; i < 12; i++) {
+        listItems.push('\
+          <div class="col-md-3">\
+            <div class="card text-center product">\
+              <img class="card-img-top-center" src="https://placehold.co/75">\
+              <div class="card-body">\
+                <p class="card-text"><small class="producttitle"></small></p>\
+                <p class="card-text"><small></small></p>\
+                <p class="card-text"></p>\
+              </div>\
+            </div>\
+          </div>')
+      }
+      $('#offersforyouproductcontainer').html(listItems);
+      $('#offersforyoucontainer').show();
+    }
+
+    /**
+     * loadOffersForYou : This method creates an offers for you carousel
+     * parameters: 
+     *  - uid :  The customers uid
+     *  - storecode : The store code the app is running in
+     **/
+    function loadOffersForYou() {
+      var listItems = []
+      $.getJSON("/backend/promotions/offersforyou?uid=" + customer.uid + "&storecode=" + store.storecode, function (data) {
+        $.each(data.response.offers, function (key, val) {
+          _product = val.product;
+          _price = "";
+          bonusBuy = "";
+
+          if (_product.price.promotionalPrice == true) {
+            _price = '<span style="color:red">' + _product.price.formattedValue + "</span>";
+          } else {
+            _price = _product.price.formattedValue;
+          }
+          $.each(_product.includedInBonusBuys, function (key, val) {
+            var _bonusBuy = val
+            if (_bonusBuy.discountType == "FIX_DISCOUNT") {
+              _price = '<span style="color:#ff4219">R' + _bonusBuy.discountValue.toFixed(2) + '</span> <small> <br/> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "AMOUNT") {
+              _price = '<span style="color:#ff4219">R' + (_product.price.value - _bonusBuy.discountValue).toFixed(2) + '</span> R' + _bonusBuy.discountValue + 'off <small> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "PERCENTAGE") {
+              _price = '<span style="color:#ff4219">R' + (_product.price.value - (_product.price.value * (val.discountValue / 100))).toFixed(2) + '</span> R' + _bonusBuy.discountValue + 'off <small> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "OTHER") {
+              bonusBuy = '<small class="bonusbuy">' + _bonusBuy.name + '</small></p>';
+            }
+          })
+          listItems.push('\
+          <div class="col-md-3">\
+            <div class="card text-center product">\
+              <img class="card-img-top-center" src="' + "https://prep.checkers.co.za" + _product.images[2].url + '">\
+              <div class="card-body">\
+                <p class="card-text"><small class="producttitle">' + _product.name + '</small></p>\
+                <p class="card-text"><small>' + _price + '</small></p>\
+                <p class="card-text">' + bonusBuy + '</p>\
+              </div>\
+            </div>\
+          </div>')
+        });
+        if (data.response.offers.length > 0) {
+          $('#offersforyouproductcontainer').html(listItems);
+          $('#offersforyoucontainer').show();
+          $('#searchcontainer').hide();
+          $('#placeholdercontainer').hide();
+        } else {
+          productSearch("Xtrasavings")
+        }
+      }).fail(function (error) {
+        harness.debug("Error retrieving Recommendations " + cardno + "<br/>", 'error');
+      });
+    }
+
+    /**
+     * loadProductRecommendations : This method is used to retrieve a basic the customers recommendations
+     * parameters: Type: In this parameter we specify the type of recommendation
+     **/
+    function loadProductRecommendations(type) {
+      var listItems = []
+      $.getJSON("/backend/promotions/ranked?uid=" + customer.uid + "&scenariotype=CHECKERS_RES", function (data) {
+        $.each(data.response.promotions, function (key, val) {
+          _product = val.product;
+          _price = "";
+          bonusBuy = "";
+
+          if (_product.price.promotionalPrice == true) {
+            _price = '<span style="color:red">' + _product.price.formattedValue + "</span>";
+          } else {
+            _price = _product.price.formattedValue;
+          }
+          $.each(_product.includedInBonusBuys, function (key, val) {
+            var _bonusBuy = val
+            if (_bonusBuy.discountType == "FIX_DISCOUNT") {
+              _price = '<span style="color:#ff4219">R' + _bonusBuy.discountValue.toFixed(2) + '</span> <small> <br/> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "AMOUNT") {
+              _price = '<span style="color:#ff4219">R' + (_product.price.value - _bonusBuy.discountValue).toFixed(2) + '</span> R' + _bonusBuy.discountValue + 'off <small> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "PERCENTAGE") {
+              _price = '<span style="color:#ff4219">R' + (_product.price.value - (_product.price.value * (val.discountValue / 100))).toFixed(2) + '</span> R' + _bonusBuy.discountValue + 'off <small> was ' + _product.price.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "OTHER") {
+              bonusBuy = '<small class="bonusbuy">' + _bonusBuy.name + '</small></p>';
+            }
+          });
+
+          listItems.push('\
+          <div class="col-md-3">\
+            <div class="card text-center product">\
+              <img class="card-img-top-center" src="' + "https://prep.checkers.co.za" + _product.images[2].url + '">\
+              <div class="card-body">\
+                <p class="card-text"><small class="producttitle">' + _product.name + '</small></p>\
+                <p class="card-text"><small>' + _price + '</small></p>\
+               <p class="card-text">' + bonusBuy + '</p>\
+              </div>\
+            </div>\
+          </div>')
+          $('#relevantxtrasavingsproductcontainer').html(listItems);
+          $('#relevantxtrasavingscontainer').show();
+          $('#searchcontainer').hide();
+          $('#placeholdercontainer').hide();
+        });
+      }).fail(function (error) {
+        harness.debug("Error retrieving Recommendations " + cardno + "<br/>", 'error');
+      });
+    }
+
+    /**
+     * productSearch : Seach for a product based on the search term passed by the search bar
+     * parameters
+     *  - searchTerm : The search term to be used
+     **/
+    function productSearch(searchTerm) {
+      var listItems = []
+      $.getJSON("/backend/products/search?search=" + searchTerm + "&storecode=" + store.storecode, function (data) {
+        $.each(data.response.products, function (key, val) {
+          _product = val;
+          _price = "";
+          bonusBuy = "";
+
+          if (_product.priceData.promotionalPrice == true) {
+            _price = '<span style="color:red">' + _product.priceData.formattedValue + "</span>";
+          } else {
+            _price = _product.priceData.formattedValue;
+          }
+          $.each(_product.bonusBuys, function (key, val) {
+            var _bonusBuy = val
+            if (_bonusBuy.discountType == "FIX_DISCOUNT") {
+              _price = '<span style="color:#ff4219">R' + _bonusBuy.discountValue + '</span> <small> <br/> was ' + _product.priceData.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "AMOUNT") {
+              _price = '<span style="color:#ff4219">R' + (_product.priceData.value - _bonusBuy.discountValue).toFixed(2) + '</span> R' + _bonusBuy.discountValue + ' off <small> was ' + _product.priceData.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "PERCENTAGE") {
+              _price = '<span style="color:#ff4219">R' + (_product.priceData.value - (_product.priceData.value * (val.discountValue / 100))).toFixed(2) + '</span> R' + _bonusBuy.discountValue + ' off <small> was ' + _product.priceData.formattedValue + '<small>';
+            }
+            if (_bonusBuy.discountType == "OTHER") {
+              bonusBuy = '<small class="bonusbuy">' + _bonusBuy.name + '</small></p>';
+            }
+          });
+          listItems.push('\
+          <div class="col-md-3">\
+            <div class="card text-center product">\
+              <img class="card-img-top-center" src="' + "https://prep.checkers.co.za" + _product.media.images[2].url + '">\
+              <div class="card-body">\
+                <p class="card-text"><small>' + _product.name + '</small></p>\
+                <p class="card-text"><small>' + _price + '</small></p>\
+                <p class="card-text">' + bonusBuy + '</p>\
+              </div>\
+            </div>\
+          </div>')
+        });
+        $('#searchproductcontainer').html(listItems);
+        $('#offersforyoucontainer').hide();
+        $('#relevantxtrasavingscontainer').hide();
+        $('#placeholdercontainer').hide();
+        $('#searchcontainer').show();
+      }).fail(function (error) {
+        harness.debug("Error retrieving Recommendations " + cardno + "<br/>", 'error');
+      });
+    }
+
+    // Add an item to the basket
+    function addToBasket(barcode) {
+      harness.debug("Product added to basket: " + barcode + "<br/>")
+      basket.push(barcode);
+      populateBasket();
+
+      // Debugging
+      harness.debugBasket(basket);
+    }
+
+    // Remove an item from the basket
+    function removeFromBasket(barcode) {
+      harness.debug("Product removed from basket: " + barcode + "<br/>")
+      basket.splice(basket.indexOf(barcode), 1);
+      populateBasket();
+
+      // Debugging
+      harness.debugBasket(basket);
+    }
+
+    // Populate our basket
+    function populateBasket(hideCheckout) {
+      var basketItems = []
+      $.each(basket, function (key, val) {
+        basketItems.push('<div class="mb-4"><div class="card" style="padding:10px">\
+          <img alt="..." src="https://placehold.co/75" >\
+          <div class="card-body" style="height:100px;text-align: left;vertical-align: text-top;">\
+            <h6 style="font-size:12px"></h6>\
+            <h6 style="font-size:9px"><div class="spinner-grow text-secondary" role="status"><span class="sr-only"></span></div></h6>\
+            <h6 style="font-size:9px"></h6>\
+          </div>\
+          </div></div>')
+      });
+      $('#basketitems').html(basketItems);
+    }
+
+    // Populate our Payment Cards
+    function populatePaymentCards() {
+      var paymentCardsItems = []
+      paymentCardsItems.push('<table class="table"><thead><tr>\
+            <th scope="col">Card</th>\
+            <th scope="col">Expiry</th>\
+            <th scope="col"> </th>\
+          </tr>\
+        </thead>\
+        <tbody id="tokenisedcards"></tbody></table>')
+      $('#checkoutContainer').html(paymentCardsItems);
+      $.post("/api/v1/payment/listcards", function (data) {
+        $.each(data.response.cards, function (key, val) {
+          console.log(val);
+          var trow = '<tr>\
+            <td>' + val.maskedCardNumber + '</td>\
+            <td>' + val.expiryYear + '-' + val.expiryMonth + '</td>\
+            <td><button type="button" class="btn btn-secondary" onclick="javascript:alert(\'' + val.token + '\')" >Pay</button></td>\
+          </tr>';
+          console.log(trow);
+          $("#tokenisedcards").append(trow)
+        })
+      })
+    }
+
+    // Populate our basket
+    function populateLeaflets() {
+      var leafletItems = []
+      $.each(basket, function (key, val) {
+        basketItems.push('<div class="mb-4"><div class="card" style="padding:10px">\
+          <img alt="..." src="https://placehold.co/75" >\
+          <div class="card-body" style="height:100px;text-align: left;vertical-align: text-top;">\
+            <h6 style="font-size:12px"></h6>\
+            <h6 style="font-size:9px"><div class="spinner-grow text-secondary" role="status"><span class="sr-only"></span></div></h6>\
+            <h6 style="font-size:9px"></h6>\
+          </div>\
+          </div></div>')
+      });      
+      $('#basketitems').html(leafletItems);
+    }
+
+
+  </script>
+
+  <!-- Test Harness code -->
+  <script>
+    var harness = new harness();
+    var app = new app();
+
+    $(document).ready(function () {
+      app.initialiseWelcome()
+    });
+
+    const moveableDiv = document.getElementById('moveableDiv');
+    moveableDiv.addEventListener('mousedown', function (e) {
+      let shiftX = e.clientX - moveableDiv.getBoundingClientRect().left;
+      let shiftY = e.clientY - moveableDiv.getBoundingClientRect().top;
+
+      function moveAt(pageX, pageY) {
+        moveableDiv.style.left = pageX - shiftX + 'px';
+        moveableDiv.style.top = pageY - shiftY + 'px';
+      }
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      moveableDiv.onmouseup = function () {
+        document.removeEventListener('mousemove', onMouseMove);
+        moveableDiv.onmouseup = null;
+      };
+    });
+
+    moveableDiv.ondragstart = function () {
+      return false;
+    };
+  </script>
+</body>
+
+</html>

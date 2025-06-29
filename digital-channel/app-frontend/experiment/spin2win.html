@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin 2 Win Game</title>
+    <style>
+        .wheel-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #CCC;
+            position: relative;
+            overflow: hidden;
+            transform: rotate(0deg);
+            transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Added shadow */
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: #fff;
+            border: 1px solid #CCC;
+            transform-origin: 100% 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .segment img {
+            transform: rotate(-45deg); /* Adjust this value to match the segment's angle */
+        }
+
+
+        .segment:nth-child(1) {
+            transform: rotate(0deg);
+        }
+
+        .segment:nth-child(2) {
+            transform: rotate(90deg);
+        }
+
+        .segment:nth-child(3) {
+            transform: rotate(180deg);
+        }
+
+        .segment:nth-child(4) {
+            transform: rotate(270deg);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wheel-container">
+        <div class="wheel" id="wheel">
+            <div class="segment"><img src="https://prep.checkers.co.za/medias/10281449EA-210524050630-checkers96Wx96H?context=bWFzdGVyfHJvb3R8MTE2MTB8aW1hZ2UvcG5nfGg0OC9oZjAvMTMzMjY4MDU2MzEwMDYucG5nfDMwNzUxMmMyYTM4MWEwYzM2ZGY1NTBmYjk5MjUxOGMxZDNiYTY0ZGI3MWI4M2EwZjVlM2VhZDA2ZTliZDc0ZWQ" alt="Image 1" width="100" height="100"></div>
+            <div class="segment"><img src="https://prep.checkers.co.za/medias/10281449EA-210524050630-checkers96Wx96H?context=bWFzdGVyfHJvb3R8MTE2MTB8aW1hZ2UvcG5nfGg0OC9oZjAvMTMzMjY4MDU2MzEwMDYucG5nfDMwNzUxMmMyYTM4MWEwYzM2ZGY1NTBmYjk5MjUxOGMxZDNiYTY0ZGI3MWI4M2EwZjVlM2VhZDA2ZTliZDc0ZWQ" alt="Image 2" width="100" height="100"></div>
+            <div class="segment"><img src="https://prep.checkers.co.za/medias/10281449EA-210524050630-checkers96Wx96H?context=bWFzdGVyfHJvb3R8MTE2MTB8aW1hZ2UvcG5nfGg0OC9oZjAvMTMzMjY4MDU2MzEwMDYucG5nfDMwNzUxMmMyYTM4MWEwYzM2ZGY1NTBmYjk5MjUxOGMxZDNiYTY0ZGI3MWI4M2EwZjVlM2VhZDA2ZTliZDc0ZWQ" alt="Image 3" width="100" height="100"></div>
+            <div class="segment"><img src="https://prep.checkers.co.za/medias/10281449EA-210524050630-checkers96Wx96H?context=bWFzdGVyfHJvb3R8MTE2MTB8aW1hZ2UvcG5nfGg0OC9oZjAvMTMzMjY4MDU2MzEwMDYucG5nfDMwNzUxMmMyYTM4MWEwYzM2ZGY1NTBmYjk5MjUxOGMxZDNiYTY0ZGI3MWI4M2EwZjVlM2VhZDA2ZTliZDc0ZWQ" alt="Image 4" width="100" height="100"></div>
+        </div>
+    </div>
+    <button id="spinButton">Spin</button>
+    <div id="result"></div>
+    <script>
+        document.getElementById('spinButton').addEventListener('click', function () {
+            const wheel = document.getElementById('wheel');
+            const randomDegree = Math.floor(Math.random() * 360) + 720; // Ensure at least 2 full spins
+            wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+            wheel.addEventListener('transitionend', function () {
+                const actualDegree = randomDegree % 360;
+                const segment = Math.floor(actualDegree / 90) + 1;
+                alert(`Segment ${segment} wins!`);
+            }, { once: true });
+        });
+    </script>
+</body>
+
+</html>

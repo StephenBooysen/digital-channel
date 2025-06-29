@@ -1,0 +1,163 @@
+<div class="container-960">
+    <div class="central-box">
+        <div class="top-row">
+            <div class="wrapper">
+                <div class="searchBar"><input id="searchQueryInput" type="text" name="searchQueryInput"
+                        placeholder="Search for the product you want" value="" /><button id="searchQuerySubmit"
+                        name="searchQuerySubmit" onclick="javascript:productSearch(searchQueryInput.value);"><svg
+                            style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#666666"
+                                d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                        </svg></button></div>
+            </div>
+        </div>
+        <div class="middle-row" style="padding-left:20px">
+            <div id="loginPageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="4000">
+                        <div style="width:720px;height:200px" onclick="loadOffersForYou();loadProductRecommendations();"><img src="banners/shopping-promotion.png"
+                                style=" border-radius: 10px;  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);"></div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <div style="width:720px;height:200px" onclick="app.initialisLeaflets();" ><img src="banners/shopping-leaflets.png"
+                                style=" border-radius: 10px;  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);"></div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#loginPageCarousel"
+                        data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span
+                            class="visually-hidden">Previous</span></button><button class="carousel-control-next"
+                        type="button" data-bs-target="#loginPageCarousel" data-bs-slide="next"><span
+                            class="carousel-control-next-icon" aria-hidden="true"></span><span
+                            class="visually-hidden">Next</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-row" style="padding-left:30px; height: 400px;overflow-y: scroll;overflow-x: hidden;" id="bottomrow" >
+            <div class="row text-start" id="placeholdercontainer">
+                <p class="fs-6 text-start bold"><h6></h6></p>
+                <div class="row" id="placeholderproductcontainer">
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="">
+                            <div class="card-body">
+                                <h6 class="card-title"></h6>
+                                <p class="card-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-start collapse" id="offersforyoucontainer">
+                <p class="fs-6 text-start bold"><h6>Personalised Offers For You</h6></p>
+                <div class="row" id="offersforyouproductcontainer">
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="https://prep.checkers.co.za/medias/10329829EA-checkers96Wx96H?context=bWFzdGVyfHJvb3R8NjYxMXxpbWFnZS9wbmd8aDM0L2hhNi8xMzMyNjQxNjc3MzE1MC5wbmd8N2NlMjZlODEyNTJhYTFiZjNmODAyYTlmYmVhOTllNjJkOGQ4NWI2NGVmZTEwODhkOTI3MjdjNjdiZGY5ODFkMA" alt="Card image cap">
+                            <div class="card-body">
+                                <h6 class="card-title">Product</h6>
+                                <p class="card-text">R100.99</p>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="row text-start collapse" id="relevantxtrasavingscontainer">
+                <p class="fs-6 text-start bold"><h6>More Xtrasavings</h6></p>
+                <div class="row text-start" id="relevantxtrasavingsproductcontainer">
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="https://prep.checkers.co.za/medias/10329829EA-checkers96Wx96H?context=bWFzdGVyfHJvb3R8NjYxMXxpbWFnZS9wbmd8aDM0L2hhNi8xMzMyNjQxNjc3MzE1MC5wbmd8N2NlMjZlODEyNTJhYTFiZjNmODAyYTlmYmVhOTllNjJkOGQ4NWI2NGVmZTEwODhkOTI3MjdjNjdiZGY5ODFkMA" alt="Card image cap">
+                            <div class="card-body">
+                                <h6 class="card-title">Product</h6>
+                                <p class="card-text">R100.99</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-start collapse" id="searchcontainer">
+                <p class="fs-6 text-start bold"><h6>Results</h6></p>
+                <div class="row text-start" id="searchproductcontainer">
+                    <div class="col-md-3">
+                        <div class="card text-center product">
+                            <img class="card-img-top-center" src="https://prep.checkers.co.za/medias/10329829EA-checkers96Wx96H?context=bWFzdGVyfHJvb3R8NjYxMXxpbWFnZS9wbmd8aDM0L2hhNi8xMzMyNjQxNjc3MzE1MC5wbmd8N2NlMjZlODEyNTJhYTFiZjNmODAyYTlmYmVhOTllNjJkOGQ4NWI2NGVmZTEwODhkOTI3MjdjNjdiZGY5ODFkMA" alt="Card image cap">
+                            <div class="card-body">
+                                <h6 class="card-title">Product</h6>
+                                <p class="card-text">R100.99</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-box">
+        <h6 style="margin-top:20px; margin-bottom:10px">Basket</h6>
+        <div id="basketitems">
+            <div class="info-block">Your basket appears to be empty. Scan some items to add</div>
+        </div>
+    </div>
+</div>
