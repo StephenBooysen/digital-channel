@@ -17,6 +17,7 @@ const app = express();
 
 //load our enviroment settings
 require('dotenv').config();
+console.log(process.env.baseURL);
     
 // Run without validating SSL : Not recommended lols
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;

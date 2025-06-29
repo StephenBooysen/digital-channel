@@ -21,7 +21,7 @@ routerService = (function () {
     const router = require('express').Router();
 
     // Variables needed
-    routerService.bearertoken = ""
+    routerService.bearertoken = "1234"
 
     /**
      * Do the oauth login to use for bearer requests
