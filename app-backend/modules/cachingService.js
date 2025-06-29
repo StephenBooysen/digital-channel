@@ -9,7 +9,7 @@
 cachingService = (function () {
 
     // Retrieve the logger
-    debuggingService = require("../modules/debuggingService")();
+    debuggingService = require("./debuggingService")();
     logger =  debuggingService.getLogger();
 
     // The cache container
