@@ -1,0 +1,14 @@
+{
+  "overrides": [
+    {
+      "files": "*.js",
+      "options": {
+        "parser": "babel",
+        "singleQuote": true,
+        "trailingComma": "all",
+        "arrowParens": "always",
+        "printWidth": 80
+      }
+    }
+  ]
+}
