@@ -22,7 +22,7 @@ routerService = function () {
   const router = require('express').Router();
 
   // Variables needed
-  routerService.bearertoken = '1234'; // Initialize with a default or placeholder token
+  routerService.bearertoken = ''; // Initialize with a default or placeholder token
 
   /**
    * Performs OAuth login to obtain a bearer token for API requests.
@@ -32,7 +32,7 @@ routerService = function () {
   const oAuth = (function () {
     // Skip if a bearer token (other than the initial placeholder) already exists.
     // This simple check might need refinement depending on token expiration handling.
-    if (routerService.bearertoken !== '1234' && routerService.bearertoken) {
+    if (routerService.bearertoken !== '' && routerService.bearertoken) {
       logger.info('Bearer token already exists. Skipping OAuth.');
       return;
     }
